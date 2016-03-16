@@ -1,5 +1,7 @@
 # Weibo login plugin for Discourse / Discourse 微博登录插件
 
+<strong>将随 Discourse 1.5 正式版被[集合插件](https://github.com/fantasticfears/discourse-chinese-localization-pack) 取代。Discourse 1.6 正式版后该插件会被删除。</strong>
+
 Authenticate with discourse with Weibo.
 
 通过微博登录 Discourse。
