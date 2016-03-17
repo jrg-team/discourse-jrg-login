@@ -1,8 +1,8 @@
-# name: Weibo login
-# about: Authenticate with discourse with weibo.
-# version: 0.4.1
+# name: Weibo login; 废弃 DEPRECATED；请迁移至集合插件
+# about: Weibo login; 废弃 DEPRECATED；请迁移至集合插件
+# version: 0.9.9
 # author: Erick Guan
-# url: https://github.com/fantasticfears/weibo-login
+# url: https://meta.discoursecn.org/localization-pack#迁移至-05-版本
 
 # inline gem 'omniauth-weibo-oauth2'
 
