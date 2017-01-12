@@ -17,10 +17,6 @@ class OmniAuth::Strategies::Jirengu < OmniAuth::Strategies::OAuth2
     raw_info['id'].to_s
   end
 
-  email do
-    raw_info['email'].to_s
-  end
-
   info do
     {
       'nickname' => raw_info['name'],
@@ -72,7 +68,7 @@ class JirenguAuthenticator < ::Auth::Authenticator
     result = Auth::Result.new
 
     data = auth_token[:info]
-    email = auth_token[:email]
+    email = auth_token[:info][:email]
     raw_info = auth_token[:extra][:raw_info]
     jirengu_uid = auth_token[:uid]
 
