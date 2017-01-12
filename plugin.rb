@@ -8,25 +8,27 @@ require 'omniauth-oauth2'
 
 class OmniAuth::Strategies::Jirengu < OmniAuth::Strategies::OAuth2
   option :client_options, {
-                          :site           => "http://user.jirengu.com",
-                          :authorize_url  => "/oauth2/authorize",
-                          :token_url      => "/oauth2/access_token"
-                        }
-  option :token_params, {
-                        :parse          => :json
-                      }
+    :site => 'http://user.jirengu.com',
+    :authorize_url => '/oauth/authorize',
+    :token_url => '/oauth/token'
+  }
 
   uid do
-    raw_info['id']
+    raw_info['id'].to_s
   end
 
   info do
     {
-      :nickname     => raw_info['screen_name'],
-      :name         => raw_info['name'],
-      :location     => raw_info['location'],
-      :image        => find_image,
-      :description  => raw_info['description'],
+      'nickname' => raw_info['name'],
+      'name' => raw_info['real_name'],
+      'image' => raw_info['avatar'],
+      'email' => raw_info['email'],
+      'gender' => raw_info['gender'],
+      'birthday' => raw_info['bitrhday'],
+      'school' => raw_info['school'],
+      'location' => raw_info['location'],
+      'company' => raw_info['company'],
+      'bio' => raw_info['bio']
     }
   end
 
@@ -38,31 +40,22 @@ class OmniAuth::Strategies::Jirengu < OmniAuth::Strategies::OAuth2
 
   def raw_info
     access_token.options[:mode] = :query
-    access_token.options[:param_name] = 'access_token'
-    @uid ||= access_token.get('/api/v1/me.json').parsed["uid"]
-    @raw_info ||= access_token.get("/api/v1/me.json", :params => {:uid => @uid}).parsed
+    @raw_info ||= access_token.get("/api/v1/me.json").parsed
   end
 
-  def find_image
-    raw_info[%w(avatar_hd avatar_large profile_image_url).find { |e| raw_info[e].present? }]
+  def email
+    raw_info['email']
   end
 
-  ##
-  # You can pass +display+, +with_offical_account+ or +state+ params to the auth request, if
-  # you need to set them dynamically. You can also set these options
-  # in the OmniAuth config :authorize_params option.
-  #
-  #
   def authorize_params
     super.tap do |params|
-      %w[display with_offical_account forcelogin].each do |v|
+      %w[scope client_options].each do |v|
         if request.params[v]
           params[v.to_sym] = request.params[v]
         end
       end
     end
   end
-
 end
 
 OmniAuth.config.add_camelization "jirengu", "Jirengu"
@@ -78,8 +71,8 @@ class JirenguAuthenticator < ::Auth::Authenticator
     result = Auth::Result.new
 
     data = auth_token[:info]
-    email = auth_token[:extra][:email]
-    raw_info = auth_token[:extra][:raw_info].slice(%i[screen_name verified])
+    email = auth_token[:email]
+    raw_info = auth_token[:extra][:raw_info]
     jirengu_uid = auth_token[:uid]
 
     current_info = ::PluginStore.get('jirengu', "jirengu_uid_#{jirengu_uid}")
