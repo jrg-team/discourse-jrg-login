@@ -2,5 +2,5 @@
 
 en:
   site_settings:
-    weibo_client_id: "Client id for Weibo authentication, registered at http://open.weibo.com/"
-    weibo_client_secret: "Client secret for Weibo authentication, registered at http://open.weibo.com/"
+    weibo_client_id: "Client id for Jirengu authentication"
+    weibo_client_secret: "Client secret for Jirengu authentication"

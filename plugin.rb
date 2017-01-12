@@ -1,16 +1,8 @@
-# name: Weibo login; 废弃 DEPRECATED；请迁移至集合插件
-# about: Weibo login; 废弃 DEPRECATED；请迁移至集合插件
-# version: 0.9.9
-# author: Erick Guan
-# url: https://meta.discoursecn.org/localization-pack#迁移至-05-版本
-
-# inline gem 'omniauth-weibo-oauth2'
-
 require 'omniauth-oauth2'
 
-class OmniAuth::Strategies::Weibo < OmniAuth::Strategies::OAuth2
+class OmniAuth::Strategies::Jirengu < OmniAuth::Strategies::OAuth2
   option :client_options, {
-                          :site           => "https://api.weibo.com",
+                          :site           => "https://user.jirengu.com",
                           :authorize_url  => "/oauth2/authorize",
                           :token_url      => "/oauth2/access_token"
                         }
@@ -29,10 +21,6 @@ class OmniAuth::Strategies::Weibo < OmniAuth::Strategies::OAuth2
       :location     => raw_info['location'],
       :image        => find_image,
       :description  => raw_info['description'],
-      :urls => {
-        'Blog'      => raw_info['url'],
-        'Weibo'     => raw_info['domain'].present?? "http://weibo.com/#{raw_info['domain']}" : "http://weibo.com/u/#{raw_info['id']}",
-      }
     }
   end
 
@@ -45,8 +33,8 @@ class OmniAuth::Strategies::Weibo < OmniAuth::Strategies::OAuth2
   def raw_info
     access_token.options[:mode] = :query
     access_token.options[:param_name] = 'access_token'
-    @uid ||= access_token.get('/2/account/get_uid.json').parsed["uid"]
-    @raw_info ||= access_token.get("/2/users/show.json", :params => {:uid => @uid}).parsed
+    @uid ||= access_token.get('/api/v1/me.json').parsed["uid"]
+    @raw_info ||= access_token.get("/api/v1/me.json", :params => {:uid => @uid}).parsed
   end
 
   def find_image
@@ -58,7 +46,6 @@ class OmniAuth::Strategies::Weibo < OmniAuth::Strategies::OAuth2
   # you need to set them dynamically. You can also set these options
   # in the OmniAuth config :authorize_params option.
   #
-  # /auth/weibo?display=mobile&with_offical_account=1
   #
   def authorize_params
     super.tap do |params|
@@ -72,13 +59,13 @@ class OmniAuth::Strategies::Weibo < OmniAuth::Strategies::OAuth2
 
 end
 
-OmniAuth.config.add_camelization "weibo", "Weibo"
+OmniAuth.config.add_camelization "jirengu", "Jirengu"
 
 # Discourse plugin
-class WeiboAuthenticator < ::Auth::Authenticator
+class JirenguAuthenticator < ::Auth::Authenticator
 
   def name
-    'weibo'
+    'jirengu'
   end
 
   def after_authenticate(auth_token)
@@ -87,9 +74,9 @@ class WeiboAuthenticator < ::Auth::Authenticator
     data = auth_token[:info]
     email = auth_token[:extra][:email]
     raw_info = auth_token[:extra][:raw_info].slice(%i[screen_name verified])
-    weibo_uid = auth_token[:uid]
+    jirengu_uid = auth_token[:uid]
 
-    current_info = ::PluginStore.get('weibo', "weibo_uid_#{weibo_uid}")
+    current_info = ::PluginStore.get('jirengu', "jirengu_uid_#{jirengu_uid}")
 
     result.user =
       if current_info
@@ -99,35 +86,33 @@ class WeiboAuthenticator < ::Auth::Authenticator
     result.name = data['name']
     result.username = data['nickname']
     result.email = email
-    result.extra_data = { weibo_uid: weibo_uid, raw_info: raw_info }
+    result.extra_data = { jirengu_uid: jirengu_uid, raw_info: raw_info }
 
     result
   end
 
   def after_create_account(user, auth)
-    weibo_uid = auth[:extra_data][:uid]
-    ::PluginStore.set('weibo', "weibo_uid_#{weibo_uid}", {user_id: user.id})
+    jirengu_uid = auth[:extra_data][:uid]
+    ::PluginStore.set('jirengu', "jirengu_uid_#{jirengu_uid}", {user_id: user.id})
   end
 
   def register_middleware(omniauth)
-    omniauth.provider :weibo, :setup => lambda { |env|
+    omniauth.provider :jirengu, :setup => lambda { |env|
       strategy = env['omniauth.strategy']
-      strategy.options[:client_id] = SiteSetting.weibo_client_id
-      strategy.options[:client_secret] = SiteSetting.weibo_client_secret
+      strategy.options[:client_id] = SiteSetting.jirengu_client_id
+      strategy.options[:client_secret] = SiteSetting.jirengu_client_secret
     }
   end
 end
 
 auth_provider :frame_width => 920,
               :frame_height => 800,
-              :authenticator => WeiboAuthenticator.new,
+              :authenticator => JirenguAuthenticator.new,
               :background_color => 'rgb(230, 22, 45)'
 
 register_css <<CSS
 
-.btn-social.weibo:before {
-  font-family: FontAwesome;
-  content: "\\f18a";
+.btn-social.jirengu:before {
 }
 
 CSS

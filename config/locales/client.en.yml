@@ -4,5 +4,5 @@ en:
   js:
     login:
       weibo:
-        title: "with Weibo"
-        message: "Authenticating with Weibo (make sure pop up blockers are not enabled)"
+        title: "with Jirengu"
+        message: "Authenticating with Jirengu (make sure pop up blockers are not enabled)"
