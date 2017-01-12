@@ -17,6 +17,10 @@ class OmniAuth::Strategies::Jirengu < OmniAuth::Strategies::OAuth2
     raw_info['id'].to_s
   end
 
+  email do
+    raw_info['email'].to_s
+  end
+
   info do
     {
       'nickname' => raw_info['name'],
@@ -43,9 +47,6 @@ class OmniAuth::Strategies::Jirengu < OmniAuth::Strategies::OAuth2
     @raw_info ||= access_token.get("/api/v1/me.json").parsed
   end
 
-  def email
-    raw_info['email']
-  end
 
   def authorize_params
     super.tap do |params|
