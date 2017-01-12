@@ -1,3 +1,9 @@
+# name: Jirengu login
+# about: Jirengu login
+# version: 0.9.9
+# author: Erick Guan
+# url: https://meta.discoursecn.org/localization-pack#迁移至-05-版本
+
 require 'omniauth-oauth2'
 
 class OmniAuth::Strategies::Jirengu < OmniAuth::Strategies::OAuth2
