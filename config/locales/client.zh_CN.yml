@@ -3,6 +3,6 @@
 zh_CN:
   js:
     login:
-      weibo:
+      jirengu:
         title: "使用饥人谷帐号登录"
         message: "使用饥人谷帐号验证登录（请确保没有禁止浏览器弹出对话框）"

@@ -2,5 +2,5 @@
 
 en:
   site_settings:
-    weibo_client_id: "Client id for Jirengu authentication"
-    weibo_client_secret: "Client secret for Jirengu authentication"
+    jirengu_client_id: "Client id for Jirengu authentication"
+    jirengu_client_secret: "Client secret for Jirengu authentication"

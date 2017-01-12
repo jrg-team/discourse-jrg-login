@@ -2,5 +2,5 @@
 
 zh_CN:
   site_settings:
-    weibo_client_id: "饥人谷帐号验证的客户端帐号（Client id）"
-    weibo_client_secret: "饥人谷帐号验证的客户端密码（Client secret）"
+    jirengu_client_id: "饥人谷帐号验证的客户端帐号（Client id）"
+    jirengu_client_secret: "饥人谷帐号验证的客户端密码（Client secret）"

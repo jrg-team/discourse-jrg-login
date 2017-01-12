@@ -1,5 +1,5 @@
 login:
-  weibo_client_id:
+  jirengu_client_id:
     default: ''
-  weibo_client_secret:
+  jirengu_client_secret:
     default: ''
