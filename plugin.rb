@@ -2,7 +2,7 @@ require 'omniauth-oauth2'
 
 class OmniAuth::Strategies::Jirengu < OmniAuth::Strategies::OAuth2
   option :client_options, {
-                          :site           => "https://user.jirengu.com",
+                          :site           => "http://user.jirengu.com",
                           :authorize_url  => "/oauth2/authorize",
                           :token_url      => "/oauth2/access_token"
                         }
